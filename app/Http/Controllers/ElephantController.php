@@ -15,26 +15,14 @@ class ElephantController extends Controller
     public function search(Request $request)
     {
         $request->validate([
-           'searchTerm' => 'nullable|string|max:255',
-           'targetField' => 'required|string|in:name,description,both',
+           'searchValue' => 'nullable|string|max:255',
+           'targetField' => 'required|string|in:name,description,id',
        ]);
 
-        $term = $request->input('term');
-        $type = $request->input('type', 'both'); // default to 'both' if no type is provided
+        $searchValue= $request->input('searchValue');
+        $targetField = $request->input('targetField', 'name');
 
         // Build the query based on search type
-        return Elephant::query()
-           ->when($type === 'name', function ($query) use ($term) {
-               $query->where('name', 'LIKE', "%{$term}%");
-           })
-           ->when($type === 'description', function ($query) use ($term) {
-               $query->where('description', 'LIKE', "%{$term}%");
-           })
-           ->when($type === 'both', function ($query) use ($term) {
-               $query->where(function ($query) use ($term) {
-                   $query->where('name', 'LIKE', "%{$term}%")
-                         ->orWhere('description', 'LIKE', "%{$term}%");
-               });
-           })->get();
+        return Elephant::query()->where($targetField, 'LIKE', '%' . $searchValue . '%')->get();
     }
 }

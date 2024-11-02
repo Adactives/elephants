@@ -18,7 +18,7 @@ class CollectionController extends Controller
         $errors = [];
 
         foreach ($request->input('elephants') as $elephant) {
-            $elephant = Elephant::findOrFail($elephant['id'])->first();
+            $elephant = Elephant::findOrFail($elephant['id']);
             if ( ! empty($elephant->user_id)) {
                 $error = ['message' => 'Elephant' . $elephant->name . ' already in a collection.'];
                 if ($elephant->user_id == $request->user()->id) {

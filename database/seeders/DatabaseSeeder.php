@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // Call your custom seeders here
         $this->call([
-            ElephantSeeder::class,
+            ElephantUserSeeder::class,
         ]);
     }
 }
