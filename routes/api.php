@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ElephantController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,5 +13,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/elephants', [ElephantController::class, 'index']);
     Route::post('/elephants/search', [ElephantController::class, 'search']);
+    Route::post('/collection/add', [CollectionController::class, 'storeElephants']);
 });
 
