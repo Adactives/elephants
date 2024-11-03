@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -14,9 +15,9 @@ class AuthController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function register(Request $request)
+    public function register(Request $request) : JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -46,10 +47,10 @@ class AuthController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(Request $request)
+    public function login(Request $request) : JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email',
@@ -83,10 +84,14 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function logout(Request $request)
     {
         $user = Auth::user();
-        // Invalidate the current token
         $user->currentAccessToken()->delete();
         return response()->json([
             'message' => 'Logout successful.',

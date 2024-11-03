@@ -14,7 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/elephants', [ElephantController::class, 'index']);
-    Route::post('/elephants/search', [ElephantController::class, 'search']);
+    Route::get('/elephants/search', [ElephantController::class, 'search']);
     Route::post('/collection/add', [CollectionController::class, 'storeElephants']);
     Route::post('/trade', [TradeController::class, 'trade']);
 });
