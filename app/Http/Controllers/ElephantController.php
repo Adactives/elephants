@@ -3,26 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Elephant;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ElephantController extends Controller
 {
-    public function index()
+
+    /**
+     * @return JsonResponse
+     */
+    public function index() : JsonResponse
     {
-        return Elephant::all();
+        return response()->json(Elephant::all());
     }
 
-    public function search(Request $request)
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function search(Request $request) : JsonResponse
     {
         $request->validate([
-           'searchValue' => 'nullable|string|max:255',
-           'targetField' => 'required|string|in:name,description,id',
+           'query' => 'required|string|max:255',
        ]);
 
-        $searchValue= $request->input('searchValue');
-        $targetField = $request->input('targetField', 'name');
+        $query = $request->input('query', '');
 
-        // Build the query based on search type
-        return Elephant::query()->where($targetField, 'LIKE', '%' . $searchValue . '%')->get();
+        $elephants = Elephant::where('name', 'LIKE', "%{$query}%")
+         ->orWhere('description', 'LIKE', "%{$query}%")
+         ->get();
+
+        return response()->json($elephants);
     }
 }
